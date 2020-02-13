@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, compose, applyMiddleware } from "redux";
+import thunkMiddleWare from "redux-thunk";
 import { Provider } from "react-redux";
 import App from "./components/App";
 import reducer from "./reducer";
@@ -39,12 +40,22 @@ const stringMiddleware = () => dispatch => action => {
   }
   return dispatch(action);
 };
-
+const myAction = dispatch => {
+  setTimeout(() => {
+    dispatch({ type: "DELAYED_ACTION" });
+  }, 1000);
+};
+const delayedActionCreator = timeout => dispatch => {
+  setTimeout(() => {
+    dispatch({ type: "DELAYED_ACTION" });
+  }, timeout);
+};
 // const store = createStore(reducer, compose(stringEnhancer, logEnhancer));
 const store = createStore(
   reducer,
-  applyMiddleware(stringMiddleware, logMiddleware)
+  applyMiddleware(thunkMiddleWare, stringMiddleware, logMiddleware)
 );
+store.dispatch(delayedActionCreator(3000));
 ReactDOM.render(
   <Provider store={store}>
     <App />
