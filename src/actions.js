@@ -1,4 +1,4 @@
-export const inc = () => ({ type: "INC" });
+export const inc = () => "INC";
 export const dec = () => ({ type: "DEC" });
 export const rnd = () => {
   return {
